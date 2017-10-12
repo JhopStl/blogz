@@ -2,9 +2,34 @@
 <!doctype html>
 <html>
     <head>
-        <title>{{title}}</title>
+        <title>{{titles}}</title>
+        <style>
+                .header
+                {
+                    color:blue;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                }
+                .base_hr
+                {
+                    color:darkslategray;
+                }
+
+                .blog_link
+                {
+                    padding-right:5px;
+                    padding-left: 5px;
+                    font-size: 0.90em;
+                }
+            </style>
+        <header>
+            <a class="blog_link" href="/blog">Main Blog Page</a>
+            <a class="blog_link" href="/newpost">Add a Blog Entry</a>
+        </header>
     </head>
 <body>
+        <h1 align="center" class="header">Build A Blog!</h1>
+        <hr class="base_hr">
 
     {% block content %}
     {% endblock %}
