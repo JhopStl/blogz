@@ -4,15 +4,15 @@
     <head>
         <title>{{titles}}</title>
         <style>
-                .header
+               
+                .error
                 {
-                    color:blue;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
+                    color: red;
                 }
+
                 .base_hr
                 {
-                    color:darkslategray;
+                    color:#97A8A8;
                 }
 
                 .blog_link
@@ -28,8 +28,15 @@
         </header>
     </head>
 <body>
-        <h1 align="center" class="header">Build A Blog!</h1>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        <ul>
+        {% for category, message in messages %}
+            <li class="{{category}}">{{message}}</li>
+        {% endfor %}
+        </ul>
+        {% endwith %}
         <hr class="base_hr">
+
 
     {% block content %}
     {% endblock %}

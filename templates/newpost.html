@@ -1,15 +1,18 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h1>Build-a-blog</h1>
+
+    <h1 style="color:#2E2E9C" align="center">Add Blog Entry</h1>
     <form action="/blog" method='post'>
         <label>
-            New blog entry:
+            New Blog Title:
+            </label>
+            <div>
             <input type="text" name='blog_title' />
+            </div>
+            <div style="padding-top:10px;">
             <textarea name="blog_entry" rows="10" cols="30">
             </textarea>
-        </label>
-        <!--input type="hidden" name="blog-id" /-->
+            </div>
         <input type="submit" value='Add Blog Entry' />
     </form>
 
