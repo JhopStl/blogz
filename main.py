@@ -49,7 +49,7 @@ def entry():
             flash("Please fill out all fields!", 'error')
             return redirect ('/newpost')
 
-        new_blog = Blog(title,body)  #create new blog object
+        new_blog = Blog(title,body)  #create new blog object- TODO - will need to add "owner" once I can filter user
         db.session.add(new_blog)
         db.session.flush()
         blogsId = new_blog.id  #assigns id to new blog
