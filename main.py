@@ -14,10 +14,23 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.String(230))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, owner):
         self.title = title
         self.body = body
+        self.owner = owner
+
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20))
+    password = db.Column(db.String(20))
+    blogs = db.relationship('Blog', backref="owner")
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 @app.route('/newpost')
 def index():
@@ -27,7 +40,7 @@ def index():
 def entry():
     if request.method == 'POST':
         title = request.form['blog_title']  #pull title from form
-        body = request.form['blog_entry']   #pull body from from
+        body = request.form['blog_entry']   #pull body from form
 
         if title == '':
             flash("Please fill out all fields!", 'error')
