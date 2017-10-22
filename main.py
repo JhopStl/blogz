@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, flash
+from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -35,6 +35,47 @@ class User(db.Model):
 @app.route('/newpost')
 def index():
     return render_template('newpost.html')
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        users = User.query.filter_by(username=username)
+        if users.count() == 1:
+            user = users.first()
+            if password == user.password:
+                session['user'] = user.username
+                flash('welcome back, '+user.username)
+                return redirect("/newpost")
+        flash('bad username or password')
+        return redirect("/login")
+
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+        #if not is_email(email):
+           # flash('zoiks! "' + email + '" does not seem like an email address')
+           # return redirect('/signup')
+        username_db_count = User.query.filter_by(username=username).count() #checks to see if username exists
+        if username_db_count > 0:
+            flash('yikes! "' + username + '" is already taken and password reminders are not implemented')
+            return redirect('/signup')
+        if password != verify:
+            flash('passwords did not match')
+            return redirect('/signup')
+        user = User(username=username, password=password) #assigns the fields data that has been input from the register form
+        db.session.add(user) #adds user to db
+        db.session.commit()
+        session['user'] = user.username
+        return redirect("/newpost")
+    else:
+        return render_template('signup.html')
 
 @app.route('/blog', methods=['POST', 'GET'])
 def entry():
