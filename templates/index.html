@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="color:#2E2E9C"align="center">Blogz Users</h1>
+    {% if users|length == 0 %}
+    <p>No users yet :/</p>
+    {% else %}
+
+    
+            {% for user in users %}
+            <div>
+            <a href='/?user={{user.username}}'><h4>{{user.username}}</h4></a>
+            <hr>
+            </div>
+            {% endfor %}
+    
+
+    {% endif %}
+{% endblock %}

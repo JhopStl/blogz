@@ -32,8 +32,13 @@ class User(db.Model):
         self.username = username
         self.password = password
 
-@app.route('/newpost')
+@app.route('/')
 def index():
+    users = User.query.all()
+    return render_template('index.html', users=users)
+
+@app.route('/newpost')
+def newpost():
     return render_template('newpost.html')
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -77,9 +82,19 @@ def signup():
     else:
         return render_template('signup.html')
 
+@app.route("/logout", methods=['POST']) #simple function that removes the session and redirects them upon logout
+def logout():
+    del session['user']
+    return redirect("/blog")
+
 @app.route('/blog', methods=['POST', 'GET'])
 def entry():
+    if not 'user' in session:
+        blogs = Blog.query.all()
+        return render_template('blog.html', titles="Build-a-blog", blogs=blogs)
+
     if request.method == 'POST':
+        owner = User.query.filter_by(username=session['user']).first()
         title = request.form['blog_title']  #pull title from form
         body = request.form['blog_entry']   #pull body from form
 
@@ -90,7 +105,7 @@ def entry():
             flash("Please fill out all fields!", 'error')
             return redirect ('/newpost')
 
-        new_blog = Blog(title,body)  #create new blog object- TODO - will need to add "owner" once I can filter user
+        new_blog = Blog(title,body, owner)  #create new blog object- TODO - will need to add "owner" once I can filter user
         db.session.add(new_blog)
         db.session.flush()
         blogsId = new_blog.id  #assigns id to new blog
@@ -102,8 +117,16 @@ def entry():
     if x:
         blogId = Blog.query.get(request.args.get('id'))
         return render_template('soloblog.html', blogId=blogId)
-    blogs = Blog.query.all()
+    owner = User.query.filter_by(username=session['user']).first()
+    blogs = Blog.query.filter_by(owner=owner).all()
     return render_template('blog.html', titles="Build-a-blog", blogs=blogs)
+
+endpoints_without_login = ['login', 'signup', 'entry', 'newpost', 'index']
+
+@app.before_request
+def require_login():
+    if not ('user' in session or request.endpoint in endpoints_without_login):
+        return redirect("/signup")
 
 if __name__== "__main__":
     app.run()
