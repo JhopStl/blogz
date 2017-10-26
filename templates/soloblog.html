@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-
-<h2 align = "center">{{blogId.title}}</h2>
-<p>{{blogId.body}}</p>
-
+<div class = "container-fluid">
+    <br>
+<h4 class = "text-primary" align="left">{{blog.title}}</h4>
+<p>{{blog.body}}</p>
+<p><p style ="font-size: .75em;"><em>written by: <u><a href = '/?user={{blog.owner.id}}'>{{blog.owner.username}}</a></u></em>
+</div>
 {% endblock %}

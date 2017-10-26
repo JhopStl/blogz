@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-
-    <h1 style="color:#2E2E9C" align="center">Add Blog Entry</h1>
+<div class = "container-fluid">
+    <h2 class = "text-primary" align="left">submit a blog!</h2>
+    <br>
     <form action="/blog" method='post'>
         <label>
             New Blog Title:
@@ -13,9 +14,9 @@
             <textarea name="blog_entry" rows="10" cols="30">
             </textarea>
             </div>
-        <input type="submit" value='Add Blog Entry' />
+        <input class ="btn btn-primary" type="submit" value='Add Blog Entry' />
     </form>
 
     <hr />
-
+</div>
 {% endblock %}

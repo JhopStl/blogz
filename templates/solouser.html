@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class = "container-fluid">
+<h2 class = "text-primary" align="left">{{name.username}}'s posts</h2>
+<br>
+{% if blogs|length == 0 %}
+<p>No posts yet :/</p>
+{% else %}
+
+    {% for blog in blogs %}
+    <u><a href='/blog?id={{blog.id}}'><h4>{{blog.title}}</h4></a></u>
+    <p>{{blog.body}}</p>
+    <p style ="font-size: .75em;"><em>written by: <u><a href = '/?user={{name.id}}'>{{name.username}}</a></u></em></p>
+    <hr>
+    {% endfor %}
+</div>
+    {% endif %}
+{% endblock %}

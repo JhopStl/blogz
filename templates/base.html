@@ -2,7 +2,8 @@
 <!doctype html>
 <html>
     <head>
-        <title>{{titles}}</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <title class = "text-primary" align = "left">{{titles}}</title>
         <style>
                
                 .error
@@ -11,22 +12,22 @@
                 }
             </style>
         <header>
+            <div class = "container-fluid">
             <div style='float: left;'>
                 <a href="/blog">all posts</a> | <a href="/newpost">new post</a> | <a href="/">home</a>
             </div>
-            <!--a class="blog_link" href="/blog">Main Blog Page</a>
-            <a class="blog_link" href="/newpost">Add a Blog Entry</a-->
 
-            <div style='float: right;'>
+            <div style='float: right;right: 10px;'>
                     {% if 'user' in session %}
-                    {{ session['user'] }}
+                    <p>logged in as: {{ session['user'] }}</p>
                     <form action="/logout" method="post" id='logout'>
-                      <input type="submit" value="Log Out" />
+                    <input class = "btn btn-default" type="submit" value="Log Out" />
                     </form>
                   {% else %}
                   <a href="login">login</a> | <a href="signup">sign up</a>
                   {% endif %}
               </div>
+            </div>
         </header>
     </head>
 <body>

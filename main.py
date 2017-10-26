@@ -35,6 +35,11 @@ class User(db.Model):
 @app.route('/')
 def index():
     users = User.query.all()
+    x = request.args.get('user')
+    if x:
+        name = User.query.get(request.args.get('user'))
+        blogs = Blog.query.filter_by(owner=name).all()
+        return render_template('solouser.html', name=name, blogs=blogs)
     return render_template('index.html', users=users)
 
 @app.route('/newpost')
@@ -64,12 +69,9 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-        #if not is_email(email):
-           # flash('zoiks! "' + email + '" does not seem like an email address')
-           # return redirect('/signup')
         username_db_count = User.query.filter_by(username=username).count() #checks to see if username exists
         if username_db_count > 0:
-            flash('yikes! "' + username + '" is already taken and password reminders are not implemented')
+            flash('Oh nos! "' + username + '" is already taken and password reminders are not implemented')
             return redirect('/signup')
         if password != verify:
             flash('passwords did not match')
@@ -89,10 +91,6 @@ def logout():
 
 @app.route('/blog', methods=['POST', 'GET'])
 def entry():
-    if not 'user' in session:
-        blogs = Blog.query.all()
-        return render_template('blog.html', titles="Build-a-blog", blogs=blogs)
-
     if request.method == 'POST':
         owner = User.query.filter_by(username=session['user']).first()
         title = request.form['blog_title']  #pull title from form
@@ -115,18 +113,18 @@ def entry():
     x = request.args.get('id')
     # checks if there are query parameters
     if x:
-        blogId = Blog.query.get(request.args.get('id'))
-        return render_template('soloblog.html', blogId=blogId)
-    owner = User.query.filter_by(username=session['user']).first()
-    blogs = Blog.query.filter_by(owner=owner).all()
-    return render_template('blog.html', titles="Build-a-blog", blogs=blogs)
+        blog = Blog.query.get(request.args.get('id'))
+        return render_template('soloblog.html', blog=blog)
+    blogs = Blog.query.all()
+    users = User.query.all()  
+    return render_template('blog.html', titles="blogz!", blogs=blogs, users=users)
 
-endpoints_without_login = ['login', 'signup', 'entry', 'newpost', 'index']
+endpoints_without_login = ['login', 'signup', 'entry', 'index']
 
 @app.before_request
 def require_login():
     if not ('user' in session or request.endpoint in endpoints_without_login):
-        return redirect("/signup")
+        return redirect("/login")
 
 if __name__== "__main__":
     app.run()

@@ -2,7 +2,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="color:#2E2E9C"align="center">Build A Blog</h1>
+<div class = "container-fluid">
+<h2 class = "text-primary" align="left">blogz!</h2>
+    <br>
     {% if blogs|length == 0 %}
     <p>No blogs yet :/</p>
     {% else %}
@@ -10,12 +12,15 @@
     
             {% for blog in blogs %}
             <div>
-            <a href='/blog?id={{blog.id}}'><h2>{{blog.title}}</h2></a>
+            <u><a href='/blog?id={{blog.id}}'><h4>{{blog.title}}</h4></a></u>
             <p>{{blog.body}}</p>
+            <p><p style ="font-size: .75em;"><em>written by: <u><a href = '/?user={{blog.owner.id}}'>{{blog.owner.username}}</a></u></em>
             <hr>
             </div>
             {% endfor %}
+            
+            
     
-
+        </div>
     {% endif %}
 {% endblock %}
